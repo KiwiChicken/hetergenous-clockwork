@@ -98,10 +98,10 @@ The workers started in the previous step will wait for an incoming connection fr
 
 On the controller machine, from Clockwork's `build` directory, run:
 ```
-./controller INFER4 volta01:12345
+./controller INFER5 volta01:12345
 ```
 
-Here, `volta01:12345` is the hostname:port of the worker started in the previous step.  `INFER4` is the name of the default Clockwork scheduler.
+Here, `volta01:12345` is the hostname:port of the worker started in the previous step.  `INFER5` is the name of the default Clockwork scheduler.
 
 You should see output similar to the following:
 ```

@@ -50,7 +50,7 @@ void show_usage() {
     s << "  DIRECT    Used for testing\n";
     s << "  ECHO      Used for testing\n";
     s << "  STRESS    Used for testing\n";
-    s << "  INFER4    The Clockwork Scheduler.  You should usually be using this.  Options:\n";
+    s << "  INFER5    The Clockwork Scheduler.  You should usually be using this.  Options:\n";
     s << "       generate_inputs    (bool, default false)  Should inputs and outputs be generated if not present.  Set to true to test network capacity\n";
     s << "       max_gpus           (int, default 100)  Set to a lower number to limit the number of GPUs.\n";
     s << "       schedule_ahead     (int, default 10000000)  How far ahead, in nanoseconds, should the scheduler schedule.\n";

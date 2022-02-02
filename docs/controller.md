@@ -12,7 +12,7 @@ TYPE
   DIRECT    Used for testing
   ECHO      Used for testing
   STRESS    Used for testing
-  INFER4    The Clockwork Scheduler.  You should usually be using this.  Options:
+  INFER5    The Clockwork Scheduler.  You should usually be using this.  Options:
        generate_inputs    (bool, default false)  Should inputs and outputs be generated if not present.  Set to true to test network capacity
        max_gpus           (int, default 100)  Set to a lower number to limit the number of GPUs.
        schedule_ahead     (int, default 10000000)  How far ahead, in nanoseconds, should the scheduler schedule.
