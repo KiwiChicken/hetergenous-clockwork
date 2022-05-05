@@ -1,0 +1,17 @@
+/home/cc/keren/clockwork/build/CMakeFiles/netcontroller.dir
+/home/cc/keren/clockwork/build/CMakeFiles/clockwork_proto.dir
+/home/cc/keren/clockwork/build/CMakeFiles/controller.dir
+/home/cc/keren/clockwork/build/CMakeFiles/convert.dir
+/home/cc/keren/clockwork/build/CMakeFiles/worker_dummy.dir
+/home/cc/keren/clockwork/build/CMakeFiles/cudafatbin.dir
+/home/cc/keren/clockwork/build/CMakeFiles/check_model.dir
+/home/cc/keren/clockwork/build/CMakeFiles/rebuild_cache.dir
+/home/cc/keren/clockwork/build/CMakeFiles/edit_cache.dir
+/home/cc/keren/clockwork/build/CMakeFiles/clockwork.dir
+/home/cc/keren/clockwork/build/CMakeFiles/inflate.dir
+/home/cc/keren/clockwork/build/CMakeFiles/netclient.dir
+/home/cc/keren/clockwork/build/CMakeFiles/simpleclient.dir
+/home/cc/keren/clockwork/build/CMakeFiles/tests.dir
+/home/cc/keren/clockwork/build/CMakeFiles/profile.dir
+/home/cc/keren/clockwork/build/CMakeFiles/worker.dir
+/home/cc/keren/clockwork/build/CMakeFiles/client.dir

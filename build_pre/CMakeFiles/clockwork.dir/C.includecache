@@ -1,0 +1,46 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/cc/keren/clockwork/external/lz4.c
+lz4.h
+/home/cc/keren/clockwork/external/lz4.h
+intrin.h
+-
+stdlib.h
+-
+string.h
+-
+assert.h
+-
+stdio.h
+-
+stdint.h
+-
+limits.h
+-
+
+/home/cc/keren/clockwork/external/lz4.h
+stddef.h
+-
+stdint.h
+-
+
+/home/cc/keren/clockwork/external/lz4hc.c
+lz4hc.h
+/home/cc/keren/clockwork/external/lz4hc.h
+lz4.c
+/home/cc/keren/clockwork/external/lz4.c
+
+/home/cc/keren/clockwork/external/lz4hc.h
+lz4.h
+/home/cc/keren/clockwork/external/lz4.h
+stdint.h
+-
+lz4.h
+/home/cc/keren/clockwork/external/lz4.h
+

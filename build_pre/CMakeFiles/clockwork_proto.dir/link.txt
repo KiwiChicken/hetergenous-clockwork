@@ -1,0 +1,2 @@
+/usr/bin/ar qc libclockwork_proto.a  CMakeFiles/clockwork_proto.dir/clockwork.pb.cc.o
+/usr/bin/ranlib libclockwork_proto.a
