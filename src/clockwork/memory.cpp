@@ -3,7 +3,7 @@
 #include <exception>
 #include <libconfig.h++>
 #include <algorithm>
-
+#include <iostream>
 
 namespace clockwork {
 
@@ -117,7 +117,13 @@ void ModelStore::get_model_info(workerapi::WorkerMemoryInfo &info) {
 			modelinfo.supported_batch_sizes = rm->model->implemented_batch_sizes();
 			modelinfo.num_weights_pages = rm->model->num_weights_pages(info.page_size);
 			modelinfo.weights_size = rm->model->weights_size;
-			modelinfo.weights_load_time_nanos = rm->model->transfer_measurement;
+			//modelinfo.weights_load_time_nanos = rm->model->transfer_measurement;
+			auto gpu_type = rm->model->gpu_type;
+			if (modelinfo.weights_load_time_nanos.find(key) == modelinfo.weights_load_time_nanos.end())
+				cout << "adding a new model info for " << source << " of gpu type " << gpu_type <<"\n";
+			else
+				cout << "UNEXPECTED: adding an existing model-gpu model info for " << source << " of gpu type " << gpu_type <<"\n";
+			modelinfo.weights_load_time_nanos[gpu_type] = rm->model->transfer_measurement;
 			for (auto &p : rm->model->models) {
 				modelinfo.batch_size_exec_times_nanos.push_back(p.second->exec_measurement);
 			}

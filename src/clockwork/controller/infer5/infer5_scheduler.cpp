@@ -133,6 +133,7 @@ void Scheduler::RequestImpl::finalize() {
     timeout();
 }
 
+
 unsigned Scheduler::Model::batch_lookup(unsigned num_requests, unsigned gpu_id) {
     return num_requests > max_batch_size ? max_batch_size : batch_lookups_[gpu_id][num_requests];
 }
@@ -236,7 +237,9 @@ std::vector<Scheduler::StrategyImpl> Scheduler::Model::new_strategies(int gpu_id
 Scheduler::InferAction* Scheduler::Model::try_dequeue(
         uint64_t free_at,
         unsigned gpu_clock,
-        int min_batchsize)
+        int min_batchsize,
+	unsigned id
+	)
 {   
     // Drain all requests from all queues that wouldn't be satisfiable
     // If specified batchsize is not achievable, return
@@ -252,7 +255,7 @@ Scheduler::InferAction* Scheduler::Model::try_dequeue(
 
     // Drop requests from batchsize queues that won't complete in time
     for (auto &queue : queues) {
-        uint64_t exec_time = estimate(queue->batchsize, gpu_clock, 0);
+        uint64_t exec_time = estimate(queue->batchsize, gpu_clock, id);
         uint64_t completion_time = free_at + exec_time;
 
         while (queue->size() > 0 && queue->front()->deadline < completion_time) {
@@ -281,7 +284,8 @@ Scheduler::InferAction* Scheduler::Model::try_dequeue(
         seqno = request->seqno;
         queue->pop();
     }
-    action->set_expectations(free_at, estimate(queue->batchsize, gpu_clock, 0), gpu_clock);
+    //uint64_t gpu_id;
+    action->set_expectations(free_at, estimate(queue->batchsize, gpu_clock, id), gpu_clock);
     action->batch();
 
     // Catch up the queues
@@ -299,7 +303,7 @@ Scheduler::InferAction* Scheduler::Model::try_dequeue(
 
 const float Scheduler::estimate_percentile = 0.99;
 
-void Scheduler::Model::add_measurement(unsigned batch_size, uint64_t duration, unsigned gpu_clock) {
+void Scheduler::Model::add_measurement(unsigned batch_size, uint64_t duration, unsigned gpu_clock, unsigned id) {
     tbb::queuing_mutex::scoped_lock lock(estimates_mutex);
 
     auto it = estimators.find(batch_size);
@@ -307,7 +311,7 @@ void Scheduler::Model::add_measurement(unsigned batch_size, uint64_t duration, u
     auto estimator = it->second;
     estimator->insert(duration * gpu_clock);
 
-    estimates[batch_size] = estimator->get_percentile(Scheduler::estimate_percentile);
+    estimates[id][batch_size] = estimator->get_percentile(Scheduler::estimate_percentile);
 }
 
 void Scheduler::Model::add_weights_measurement(uint64_t duration) {
@@ -317,12 +321,12 @@ void Scheduler::Model::add_weights_measurement(uint64_t duration) {
     weights_estimate = weights_estimator->get_percentile(Scheduler::estimate_percentile);
 }
 
-uint64_t Scheduler::Model::estimate(unsigned batch_size, unsigned gpu_id) {
-    return Scheduler::Model::estimate(batch_size, Scheduler::default_clock, gpu_id);
+uint64_t Scheduler::Model::estimate(unsigned batch_size, unsigned id) {
+    return Scheduler::Model::estimate(batch_size, Scheduler::default_clock, id);
 }
 
-uint64_t Scheduler::Model::estimate(unsigned batch_size, int clock, unsigned gpu_id) {
-    unsigned effective_batch_size = batch_lookup(batch_size, gpu_id);
+uint64_t Scheduler::Model::estimate(unsigned batch_size, int clock, unsigned id) {
+    unsigned effective_batch_size = batch_lookup(batch_size, id);
     return estimates[effective_batch_size] / clock;
 }
 
@@ -749,7 +753,6 @@ bool Scheduler::GPU::schedule_infer() {
 
         auto strategy = *strategies.begin();
         auto instance = strategy.instance;
-
         // Remove all strategies for this instance
         int expected = instance->strategies.size();
         int before = strategies.size();
@@ -767,7 +770,7 @@ bool Scheduler::GPU::schedule_infer() {
             continue;
         }
 
-        InferAction* action = strategy.instance->model->try_dequeue(exec_at, clock, strategy.batch_size);
+        InferAction* action = strategy.instance->model->try_dequeue(exec_at, clock, strategy.batch_size, id);
 
         schedule_infer_action_attempted++;
         if (action != nullptr) {
@@ -823,6 +826,7 @@ void Scheduler::GPU::infer_success(InferAction* action, std::shared_ptr<workerap
         action->action->batch_size, 
         result->exec.duration, 
         (result->gpu_clock + result->gpu_clock_before) / 2
+	id
     );
 
     action->set_result(result);

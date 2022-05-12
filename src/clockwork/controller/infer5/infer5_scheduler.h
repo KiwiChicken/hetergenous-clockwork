@@ -274,8 +274,9 @@ class Scheduler : public clockwork::Scheduler {
         unsigned max_batch_size;
 
         tbb::queuing_mutex estimates_mutex;
-        std::vector<uint64_t> estimates;
-        std::map<unsigned, SlidingWindow*> estimators;
+        //std::vector<uint64_t> estimates;
+        std::vector<unsigned, std::vector<uint64_t>> estimates;
+	std::map<unsigned, SlidingWindow*> estimators;
 
         tbb::queuing_mutex weights_estimate_mutex;
         SlidingWindow* weights_estimator;
